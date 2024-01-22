@@ -35,6 +35,7 @@ fun App() {
                 navController.navigate("detail/$it/dada")
             }
         }
+
         composable("detail/{poets}/{test}",
             arguments = listOf(navArgument("poets") {
                 type = NavType.StringType
