@@ -3,7 +3,7 @@ package com.example.composemvvm.viewModel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.composemvvm.models.Poet
+import com.example.composemvvm.models.practice.Poet
 import com.example.composemvvm.repo.PoetRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow

@@ -1,4 +1,4 @@
-package com.example.composemvvm.models
+package com.example.composemvvm.models.practice
 
 data class Poet(
     val books: List<String>,

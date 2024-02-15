@@ -1,8 +1,6 @@
 package com.example.composemvvm.network
 
-import com.example.composemvvm.models.GetPoetsModel
-import com.example.composemvvm.models.Poet
-import com.example.composemvvm.models.PoetsModel
+import com.example.composemvvm.models.practice.Poet
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header

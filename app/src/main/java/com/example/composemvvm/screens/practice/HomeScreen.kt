@@ -1,4 +1,4 @@
-package com.example.composemvvm.screens
+package com.example.composemvvm.screens.practice
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border

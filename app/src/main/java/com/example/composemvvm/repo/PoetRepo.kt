@@ -1,10 +1,8 @@
 package com.example.composemvvm.repo
 
 import android.util.Log
-import com.example.composemvvm.models.Poet
-import com.example.composemvvm.models.PoetsModel
+import com.example.composemvvm.models.practice.Poet
 import com.example.composemvvm.network.ApiInterface
-import com.google.gson.Gson
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
