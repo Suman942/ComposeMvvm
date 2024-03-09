@@ -1,6 +1,9 @@
 [versions]
 agp = "8.2.0"
+coil = "2.6.0"
+coreSplashscreen = "1.0.1"
 gradle = "7.0.0"
+hiltVersion = "2.50"
 kotlin = "1.9.0"
 core-ktx = "1.12.0"
 junit = "4.13.2"
@@ -16,8 +19,12 @@ constraintlayout = "2.1.4"
 
 
 [libraries]
+androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltVersion" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }

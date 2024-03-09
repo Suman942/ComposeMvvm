@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.composemvvm"
-        minSdk = 31
+        minSdk = 29
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -91,11 +91,12 @@ dependencies {
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
-    implementation("androidx.core:core-splashscreen:1.0.0")
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.coil)
 
     val hiltVersion = "2.50"
-    implementation("com.google.dagger:hilt-android:$hiltVersion")
-    kapt("com.google.dagger:hilt-android-compiler:$hiltVersion")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 
     val hiltNavigationCompose = "1.0.0"
     implementation("androidx.hilt:hilt-navigation-compose:$hiltNavigationCompose")
