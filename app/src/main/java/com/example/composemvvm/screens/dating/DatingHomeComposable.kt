@@ -1,6 +1,7 @@
 package com.example.composemvvm.screens.dating
 
 import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -151,7 +153,9 @@ fun DatingHomeThird(
     paddingValues: PaddingValues,
     state: BluetoothUIState,
     onStartScan: () -> Unit,
-    onStopScan: () -> Unit
+    onStopScan: () -> Unit,
+    onDeviceClick: (BluetoothDevice) -> Unit,
+    onStartServer: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -159,7 +163,10 @@ fun DatingHomeThird(
             .padding(paddingValues)
 
     ) {
-        BluetoothDeviceList(pairedDeviceList = state.pairedDevices, scannedDeviceList =state.scannedDevices , onClick ={},
+        val context = LocalContext.current
+
+        BluetoothDeviceList(pairedDeviceList = state.pairedDevices, scannedDeviceList =state.scannedDevices ,
+            onDeviceClick,
             modifier = Modifier.fillMaxWidth().weight(1f))
         
         Row(
@@ -172,7 +179,7 @@ fun DatingHomeThird(
             Button(onClick = {onStopScan()}) {
                 Text(text = "Stop", color = Color.White)
             }
-            Button(onClick = {}) {
+            Button(onClick = onStartServer) {
                 Text(text = "Start Server", color = Color.White)
             }
         }
@@ -184,8 +191,9 @@ fun DatingHomeThird(
 fun BluetoothDeviceList(
     pairedDeviceList: List<BluetoothDevice>,
     scannedDeviceList: List<BluetoothDevice>,
-    onClick: (BluetoothDevice) -> Unit, modifier: Modifier = Modifier
+    onDeviceClick:  (BluetoothDevice) -> Unit, modifier: Modifier = Modifier
 ) {
+    val context = LocalContext.current
     LazyColumn(modifier = modifier) {
         item{
             Text(text = "Paired device", fontWeight = FontWeight.Bold,
@@ -198,7 +206,7 @@ fun BluetoothDeviceList(
                 fontSize = 16.sp,
                 modifier = modifier
                     .fillMaxWidth()
-                    .clickable { device.name }
+                    .clickable { onDeviceClick(device)  }
                     .padding(16.dp))
         }
 
@@ -213,7 +221,8 @@ fun BluetoothDeviceList(
                 fontSize = 16.sp,
                 modifier = modifier
                     .fillMaxWidth()
-                    .clickable { device.name }
+                    .clickable { Toast.makeText(context,device.name,Toast.LENGTH_SHORT).show()
+                    onDeviceClick(device)}
                     .padding(16.dp))
         }
     }

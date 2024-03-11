@@ -100,8 +100,7 @@ fun App(baseContext: Context) {
 @Composable
 fun DatingNavGraphComposable(baseContext: Context) {
     val navController = rememberNavController()
-    val viewModel = hiltViewModel<BluetoothViewModel>()
-    val state by viewModel.state.collectAsState()
+
     NavHost(navController = navController, startDestination = "onBoarding") {
         composable("onBoarding") {
             DatingOnBoardingScreen(
@@ -113,7 +112,8 @@ fun DatingNavGraphComposable(baseContext: Context) {
                 popBackStack = { navController.popBackStack() })
         }
         composable("home") {
-            DatingLandingScreen(state, viewModel::startScan, viewModel::stopScan)
+//            state, viewModel::startScan, viewModel::stopScan,viewModel::connectToDevice,viewModel::waitForIncomingConnection
+            DatingLandingScreen()
         }
 
     }

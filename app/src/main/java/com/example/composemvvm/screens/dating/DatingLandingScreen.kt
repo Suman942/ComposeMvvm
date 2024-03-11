@@ -1,7 +1,10 @@
 package com.example.composemvvm.screens.dating
 
 import android.content.Context
+import android.widget.Toast
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Chat
@@ -16,6 +19,7 @@ import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -37,23 +41,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.composemvvm.bluetoothchat.domain.BluetoothDevice
 import com.example.composemvvm.bluetoothchat.domain.BluetoothUIState
+import com.example.composemvvm.bluetoothchat.presentation.BluetoothViewModel
 import com.example.composemvvm.utils.Dimens
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DatingLandingScreen(state: BluetoothUIState,
-                        onStartScan: () -> Unit,
-                        onStopScan: () -> Unit) {
+fun DatingLandingScreen() {
     val navController = rememberNavController()
+
 
     val items = listOf(
         BottomNavigationItem(
@@ -178,7 +188,28 @@ fun DatingLandingScreen(state: BluetoothUIState,
                     DatingHomeSecond(paddingValues)
                 }
                 composable("home3"){
-                    DatingHomeThird(paddingValues,state, onStartScan, onStopScan)
+                    val viewModel = hiltViewModel<BluetoothViewModel>()
+                    val state by viewModel.state.collectAsState()
+                    val context = LocalContext.current
+                    LaunchedEffect(key1 = state.isConnected){
+                        if (state.isConnected) {
+                            Toast.makeText(context, "You are connected", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    LaunchedEffect(key1 = state.errorMessage){
+                        state.errorMessage?.let {
+                            Toast.makeText(context,"${state.errorMessage}",Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    when{
+                       state.isConnecting->{
+                           Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
+                               CircularProgressIndicator()
+                           }}
+                        else ->{
+                            DatingHomeThird(paddingValues = paddingValues, state = state, onStartScan = viewModel::startScan, onStopScan =  viewModel::stopScan, onDeviceClick = viewModel::connectToDevice, onStartServer = viewModel::waitForIncomingConnection)
+                        }
+                    }
                 }
 
             }
