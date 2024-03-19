@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +34,9 @@ class BluetoothViewModel @Inject constructor(private val bluetoothController: Bl
         _state
     ) { scannedDevices, pairedDevices, state ->
         state.copy(
-            scannedDevices = scannedDevices, pairedDevices = pairedDevices
+            scannedDevices = scannedDevices,
+            pairedDevices = pairedDevices,
+            messages = if (state.isConnected) state.messages else emptyList()
         )
 
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), _state.value)
@@ -78,6 +81,17 @@ class BluetoothViewModel @Inject constructor(private val bluetoothController: Bl
             .stopDiscovery()
     }
 
+    fun sendMessage(message:String){
+        viewModelScope.launch {
+            val bluetoothMessage = bluetoothController.trySendMessage(message)
+            if (bluetoothMessage != null){
+                _state.update { it.copy(
+                    messages = it.messages + bluetoothMessage
+                ) }
+            }
+        }
+    }
+
     private fun Flow<ConnectionResult>.listen(): Job {
         return onEach { result ->
             when (result) {
@@ -90,6 +104,11 @@ class BluetoothViewModel @Inject constructor(private val bluetoothController: Bl
                         )
                     }
                 }
+                is ConnectionResult.TransferSucceeded ->{
+                    _state.update { it.copy(
+                        messages = it.messages + result.message
+                    ) }
+                }
 
                 is ConnectionResult.Error -> {
                     _state.update {
@@ -99,6 +118,9 @@ class BluetoothViewModel @Inject constructor(private val bluetoothController: Bl
                             errorMessage = result.message
                         )
                     }
+                }
+                else ->{
+
                 }
             }
         }.catch { throwable ->

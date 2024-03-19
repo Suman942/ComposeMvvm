@@ -8,13 +8,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Chat
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Chat
-import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Badge
@@ -55,6 +53,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.composemvvm.bluetoothchat.domain.BluetoothDevice
 import com.example.composemvvm.bluetoothchat.domain.BluetoothUIState
+import com.example.composemvvm.bluetoothchat.domain.ChatScreen
 import com.example.composemvvm.bluetoothchat.presentation.BluetoothViewModel
 import com.example.composemvvm.utils.Dimens
 import kotlinx.coroutines.launch
@@ -72,7 +71,7 @@ fun DatingLandingScreen() {
             unselectedItem = Icons.Outlined.Home,
             hasNews = false
         ), BottomNavigationItem(
-            title = "Email",
+            title = "Favourite",
             selectedItem = Icons.Filled.Favorite,
             unselectedItem = Icons.Outlined.Favorite,
             hasNews = true
@@ -160,7 +159,7 @@ fun DatingLandingScreen() {
                 }
             },
             topBar = {
-                TopAppBar(title = { Text(text = "Dating") }, navigationIcon = {
+                TopAppBar(title = { Text(text = "Compose") }, navigationIcon = {
                     IconButton(onClick = {
 //                    if (context is Activity)
 //                        context.finish()
@@ -206,6 +205,8 @@ fun DatingLandingScreen() {
                            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center){
                                CircularProgressIndicator()
                            }}
+                        state.isConnected ->{
+                            ChatScreen(paddingValues = paddingValues,state = state, onDisConnect =  viewModel::disconnectFromDevice , sendMessages = viewModel::sendMessage) }
                         else ->{
                             DatingHomeThird(paddingValues = paddingValues, state = state, onStartScan = viewModel::startScan, onStopScan =  viewModel::stopScan, onDeviceClick = viewModel::connectToDevice, onStartServer = viewModel::waitForIncomingConnection)
                         }
